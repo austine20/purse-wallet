@@ -1,23 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import ProtectedRoutes from "./pages/ProtectedRoutes";
+import PublicRoutes from "./pages/PublicRoutes";
+import Loader from "./pages/Loader";
+import { useSelector } from "react-redux";
+import Transaction from "./pages/Transaction/Transaction";
 
 function App() {
+  const { loading } = useSelector((state) => state.loading);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {loading && <Loader />}
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <PublicRoutes>
+                <Login />
+              </PublicRoutes>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <PublicRoutes>
+                <Register />
+              </PublicRoutes>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoutes>
+                <Dashboard />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoutes>
+                <Transaction />
+              </ProtectedRoutes>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
